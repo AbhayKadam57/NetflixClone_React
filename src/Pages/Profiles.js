@@ -1,14 +1,22 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import React from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import styled from "styled-components";
 import Navbar from "../Components/Navbar";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import ProfileModal from "../Components/ProfileModal";
+import { ProfileConetxt } from "../ProfileContext";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import { UserContext } from "../UserContext";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 const Wrapper = styled.div`
   background-color: #1a1a1a;
   height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
 `;
 
 const Container = styled.div`
@@ -18,6 +26,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   gap: 30px;
+  flex-wrap: wrap;
 `;
 
 const Profile = styled.div`
@@ -75,22 +84,74 @@ const Plus = styled.div`
 `;
 
 const Profiles = () => {
+  const { dispatch } = useContext(ProfileConetxt);
+
+  const { username } = useContext(UserContext);
+
+  const { avatar, selected } = useContext(ProfileConetxt);
+
+  // const [avatars, setAvatars] = useState([]);
+
+  console.log(selected);
+
+  useEffect(() => {
+    const getData = async () => {
+      const docRef = doc(db, "users", username.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data().avatar);
+        console.log("Document data:", docSnap.data().selected);
+
+        dispatch({ type: "LOAD_PROFILES", payload: docSnap.data() });
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    };
+
+    getData();
+  }, []);
+
+  // useEffect(() => {
+  //   const setData = async () => {
+  //     await setDoc(doc(db, "users", username.uid), {
+  //       avatar: avatar,
+  //     });
+  //   };
+
+  //   if (avatar.length > 0) {
+  //     setData();
+  //   }
+  // }, [avatar]);
+
+  const handleClick = async (item) => {
+    dispatch({ type: "CHOOSE", payload: item });
+
+    await setDoc(doc(db, "users", username.uid), {
+      selected: selected,
+    });
+  };
+
   return (
     <Wrapper>
       <Navbar />
       <Container>
-        <Profile>
-          <img src="../images/profile1.jpg" />
-          <div>Person 1</div>
-        </Profile>
-        <Profile>
-          <img src="../images/profile1.jpg" />
-          <div>Person 2</div>
-        </Profile>
-        <Plus>
+        {avatar?.length > 0 &&
+          avatar?.map((item, index) => (
+            <Link to="/home" key={index} onClick={() => handleClick(item)}>
+              <Profile>
+                <img src={item.image} />
+                <div>{item.name}</div>
+              </Profile>
+            </Link>
+          ))}
+
+        <Plus onClick={() => dispatch({ type: "OPEN_MODAL" })}>
           <FontAwesomeIcon icon={faPlus} style={{ fontSize: "12em" }} />
         </Plus>
       </Container>
+      <ProfileModal />
     </Wrapper>
   );
 };

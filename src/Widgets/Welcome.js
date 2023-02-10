@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { LanguageContext } from "../LanguageContext";
+import Data from "../LanguageTranslate";
 
 const Container = styled.div`
   color: #fff;
@@ -90,29 +92,35 @@ const Arrow = styled.div`
 `;
 
 const Welcome = () => {
-  const [user, setUser] = useState("kadamabhay40@gmail.com");
-
-  const [checkUser, setCheckUser] = useState("");
+  const { Language } = useContext(LanguageContext);
 
   return (
     <Container>
       <MainBox>
-        <Title>Unlimited movies, TV shows and more.</Title>
-        <SubTitle>Watch anywhere. Cancel anytime.</SubTitle>
+        <Title>
+          {Language === "hindi"
+            ? Data.title
+            : "Unlimited movies, TV shows and more."}
+        </Title>
+        <SubTitle>
+          {Language === "hindi"
+            ? Data.subtitle
+            : "Watch anywhere. Cancel anytime."}
+        </SubTitle>
         <NewTitle>
-          Ready to watch? Enter your email to create or restart your membership.
+          {Language === "hindi"
+            ? Data.note
+            : "Ready to watch? Enter your email to create or restart your membership."}
         </NewTitle>
         <GetStartedTitle>
-          <InputTitle
-            placeholder="Email address"
-            onChange={(e) => setCheckUser(e.target.value)}
-          />
+          <InputTitle placeholder="Email address" />
           <Link
-            to={user === checkUser ? "/home" : "/"}
+            to="/signin"
+            // to={user === checkUser ? "/profiles" : "/"}
             style={{ textDecoration: "none" }}
           >
             <Button>
-              <p>Get started</p>
+              <p>{Language === "hindi" ? Data.button : "Get started"}</p>
               <Arrow>
                 <FontAwesomeIcon icon={faChevronRight} />
               </Arrow>

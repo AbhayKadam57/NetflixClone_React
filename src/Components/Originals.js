@@ -6,13 +6,16 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
 const Container = styled.div`
-  padding: 20px;
+  padding: 30px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  position: relative;
+  height: 500px;
 `;
 
 const Heading = styled.h1`
@@ -33,14 +36,17 @@ const Posters = styled.div`
 `;
 
 const Poster = styled.div`
+  height: 350px;
   width: 200px;
-  height: 300px;
   background-image: url(${(props) => props.bg});
   background-position: center;
-  background-size: contain;
-  flex-shrink: 0;
-  position: relative;
+  background-size: cover;
+  background-repeat: no-repeat;
+  /* flex-shrink: 0; */
+  /* position: relative; */
   border-radius: 5px;
+  background-color: green;
+
   &:hover {
     transform: scale(1.1);
     cursor: pointer;
@@ -59,20 +65,18 @@ const Arrows = styled.div`
   z-index: 10;
 `;
 
-const Scroll = styled.div`
-  width: 100%;
-  display: flex;
-  gap: 20px;
-  transform: translateX(${(props) => `${props.value}px`});
-  transition: all 0.5s linear;
-  height: 350px;
+const Scroll = styled(Slider)`
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  height: 300px;
+  position: absolute;
 `;
 
 const Video = styled.video`
   width: 200px;
-  height: 300px;
+  height: 350px;
   flex-shrink: 0;
   object-fit: cover;
   transition: all 0.3s linear;
@@ -92,22 +96,29 @@ const Originals = ({ request }) => {
 
   console.log(change);
 
-  const handleChange = (type) => {
-    if (type === "left") {
-      change !== 0 && SetChange(change + 200);
-    } else if (type === "right") {
-      change !== -movies?.length * 150 && SetChange(change - 200);
-    }
-  };
+  // const handleChange = (type) => {
+  //   if (type === "left") {
+  //     change !== 0 && SetChange(change + 200);
+  //   } else if (type === "right") {
+  //     change !== -movies?.length * 150 && SetChange(change - 200);
+  //   }
+  // };
 
   useEffect(() => {
     let subscribe = true;
 
     const getData = async () => {
-      let response = await axios(request).then((res) => {
-        return res.data.results;
-      });
+      let response;
 
+      try {
+        let data = await axios(request);
+
+        response = await data.data.results;
+      } catch (err) {
+        console.log(err);
+      }
+
+      // setMovies(response);
       if (subscribe === true) {
         setMovies(response);
       }
@@ -120,40 +131,78 @@ const Originals = ({ request }) => {
     };
   }, []);
 
+  var settings = {
+    dots: false,
+    // infinite: true,
+    speed: 500,
+    slidesToShow: 6,
+    slidesToScroll: 6,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 800,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
   return (
     <Container>
       <Heading>Netflix Originals</Heading>
-      <Arrows direction="left" onClick={() => handleChange("left")}>
+      {/* <Arrows direction="left" onClick={() => handleChange("left")}>
         <FontAwesomeIcon icon={faChevronLeft} />
-      </Arrows>
+      </Arrows> */}
 
-      <Posters>
-        <Scroll value={change} limit={movies?.length}>
-          {movies?.map((movie) => {
-            return isHovering === movie.id ? (
-              <Video
-                autoplay
-                loop
-                muted
-                onMouseLeave={() => setIsHovering(-1)}
-                onMouseEnter={(e) => e.target.play()}
-              >
-                <source src="../images/video1.mp4" type="video/mp4"></source>
-              </Video>
-            ) : (
-              <Poster
-                id={movie.id}
-                onMouseEnter={(e) => setIsHovering(movie.id)}
-                bg={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
-              />
-            );
-          })}
-        </Scroll>
-      </Posters>
+      {/* <Posters> */}
+      <Scroll {...settings}>
+        {movies?.map((movie) => {
+          return isHovering === movie.id ? (
+            <Video
+              key={movie.id}
+              autoplay
+              loop
+              muted
+              onMouseLeave={() => setIsHovering(-1)}
+              onMouseEnter={(e) => e.target.play()}
+            >
+              <source src="../images/netflix.mp4" type="video/mp4"></source>
+            </Video>
+          ) : (
+            <Poster
+              key={movie.id}
+              id={movie.id}
+              ket={movie.id}
+              onMouseEnter={(e) => setIsHovering(movie.id)}
+              bg={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+            />
+          );
+        })}
+      </Scroll>
+      {/* </Posters> */}
 
-      <Arrows direction="right" onClick={() => handleChange("right")}>
+      {/* <Arrows direction="right" onClick={() => handleChange("right")}>
         <FontAwesomeIcon icon={faChevronRight} />
-      </Arrows>
+      </Arrows> */}
     </Container>
   );
 };

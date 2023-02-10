@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { auth } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import styled from "styled-components";
 import {
   BrowserRouter as Router,
@@ -7,9 +9,6 @@ import {
   Link,
   useNavigate,
 } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
-
-import { auth } from "../firebase";
 
 const Container = styled.div`
   color: white;
@@ -52,11 +51,6 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 22px;
-`;
-
-const Small = styled.small`
-  color: red;
-  display: ${(props) => (props.error ? "block" : "none")};
 `;
 
 const Inputs = styled.div`
@@ -117,8 +111,6 @@ const LogInForm = () => {
 
   const [password, setPassword] = useState();
 
-  const [error, setError] = useState(false);
-
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -131,17 +123,17 @@ const LogInForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, username, password)
+    createUserWithEmailAndPassword(auth, username, password)
       .then((userCredential) => {
         const user = userCredential.user;
         console.log(user);
         localStorage.setItem("user", JSON.stringify(user));
+        // navigate("/home");
       })
       .then(() => window.location.assign("/profiles"))
       .catch((error) => {
         const errorMessage = error.message;
         console.log(errorMessage);
-        setError(true);
       });
 
     console.log("hello");
@@ -151,7 +143,7 @@ const LogInForm = () => {
     <Container>
       <FormContainer>
         <Form onSubmit={(e) => handleSubmit(e)}>
-          <h1>Sign In</h1>
+          <h1>Sign Up</h1>
           <Inputs>
             <Input
               placeholder="Email or phone number"
@@ -167,9 +159,9 @@ const LogInForm = () => {
             />
           </Inputs>
           <Buttons>
-            <Button type="submit" style={{ width: "100%" }}>
-              Sign In
-            </Button>
+            {/* <Link to="/signin" style={{ width: "100%" }}> */}
+            <Button type="submit">Sign Up</Button>
+            {/* </Link> */}
 
             <Approval>
               <div
@@ -183,13 +175,12 @@ const LogInForm = () => {
               </a>
             </Approval>
           </Buttons>
-          <Small error={error}>Please enter valid username and password</Small>
         </Form>
         <div>
           <p>
-            New to NetFlix{" "}
-            <Link to="/signin" style={{ color: "white" }}>
-              Sign up here
+            Already have an account{" "}
+            <Link to="/login" style={{ color: "white" }} href="#">
+              Sign In here
             </Link>
           </p>
         </div>

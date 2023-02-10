@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { LanguageContext } from "../LanguageContext";
 
 const Container = styled.div`
   /* background-color: red; */
@@ -38,11 +39,19 @@ const Button = styled.button`
 `;
 
 const SignIn = () => {
+  const { Language, dispatch } = useContext(LanguageContext);
+
+  const handleChange = (e) => {
+    dispatch({ type: "Change", payload: e.target.value });
+  };
+
+  console.log(Language);
+
   return (
     <Container>
-      <Select>
-        <Option>English</Option>
-        <Option>हिंदी</Option>
+      <Select onChange={(e) => handleChange(e)}>
+        <Option value="English">English</Option>
+        <Option value="hindi">हिंदी</Option>
       </Select>
       <Link to="/login">
         <Button>Sign In</Button>

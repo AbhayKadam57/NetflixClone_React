@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import Footer from "../Components/Footer";
 import LogInForm from "../Components/LogInForm";
@@ -25,7 +26,7 @@ const SignUp = () => {
     <Container>
       <Wrapper>
         <Navbar on={false} />
-        <LogInForm />
+        <Outlet />
       </Wrapper>
       <Footer />
     </Container>

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { MovieOpenContext } from "../MovieContext";
 
 const Banners = styled.div`
   background-image: url(${(props) => props.bg});
@@ -23,6 +24,22 @@ const Banners = styled.div`
     background: linear-gradient(to top, rgba(28, 28, 28, 1), transparent);
     height: 10em;
   }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 1),
+      rgba(0, 0, 0, 0.4),
+      rgba(0, 0, 0, 0.1),
+      rgba(0, 0, 0, 0)
+    );
+    height: 100%;
+    width: 100%;
+  }
 `;
 
 const Details = styled.div`
@@ -35,8 +52,17 @@ const Details = styled.div`
   flex-direction: column;
   gap: 20px;
   /* background: linear-gradient(to top, rgba(0, 0, 0, 0.2) 60%, transparent); */
+
+  @media (max-width: 1000px) {
+    width: 80%;
+  }
+
   h1 {
     font-size: 3em;
+
+    @media (max-width: 600px) {
+      font-size: 2em;
+    }
   }
 `;
 
@@ -60,14 +86,27 @@ const Button = styled.button`
     background-color: #ddd;
     color: black;
   }
+
+  @media (max-width: 768px) {
+    width: 5em;
+    font-size: 14px;
+  }
 `;
 
 const Summary = styled.p`
   font-weight: 600;
+
+  @media (max-width: 600px) {
+    font-size: 14px;
+  }
 `;
 
 const Banner = ({ request }) => {
   const [movies, setMovies] = useState();
+
+  const [search, setSearch] = useState();
+
+  const { dispatch } = useContext(MovieOpenContext);
 
   const Trim = (string) => {
     return string?.length > 150 ? string.substring(0, 150) + "..." : string;
@@ -77,9 +116,15 @@ const Banner = ({ request }) => {
     let subscribe = true;
 
     const getData = async () => {
-      let response = await axios(request).then((res) => {
-        return res.data.results;
-      });
+      let response;
+
+      try {
+        let data = await axios(request);
+
+        response = await data.data.results;
+      } catch (err) {
+        console.log(err);
+      }
 
       if (subscribe === true) {
         setMovies(response[Math.floor(Math.random() * 19)]);
@@ -93,6 +138,35 @@ const Banner = ({ request }) => {
     };
   }, []);
 
+  const handleSearch = (title) => {
+    setSearch(title);
+
+    const options = {
+      method: "GET",
+      url: "https://youtube-data8.p.rapidapi.com/search/",
+      params: { q: `${title}`, hl: "en", gl: "US" },
+      headers: {
+        "X-RapidAPI-Key": "0a58c523efmsh5fa9bfaabaf56ccp15310fjsn187501fba186",
+        "X-RapidAPI-Host": "youtube-data8.p.rapidapi.com",
+      },
+    };
+
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log(response.data);
+
+        let query = response.data.contents[0].video.videoId;
+
+        dispatch({ type: "OPEN", payload: { videoID: query, click: true } });
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+
+    console.log(title);
+  };
+
   return (
     <Banners
       bg={`https://image.tmdb.org/t/p/original/${movies?.backdrop_path}`}
@@ -100,7 +174,11 @@ const Banner = ({ request }) => {
       <Details>
         <h1>{movies?.name || movies?.original_title}</h1>
         <Buttons>
-          <Button>Play</Button>
+          <Button
+            onClick={() => handleSearch(movies?.name || movies?.original_title)}
+          >
+            Play
+          </Button>
           <Button>My List</Button>
         </Buttons>
         <Summary>{Trim(`${movies?.overview}`)}</Summary>
