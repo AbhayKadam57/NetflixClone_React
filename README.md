@@ -1,3 +1,7 @@
+![HomePage](https://user-images.githubusercontent.com/93931081/218508625-f49fe241-d989-4aaf-808c-62f213c00918.jpg)
+
+
+
 <h3 align="center">Netflix Clone-With SignUp/Login & Watching Youtube Trailer Features</h3>
 
 <p align="center">This repository contains a Netflix clone built using React, ContextAPI,useReducer hook, Firebase authentication for signUp and login and also different profile creation. This project has Welcome Page, Sign Up Page.Login page, Profile page,Home page with banner and movie list.</p>
@@ -13,6 +17,9 @@
 ## 🎈 Usage or Demo <a name="usage"></a>
 
 Please watch the following demo video for usage of the website:
+
+
+https://user-images.githubusercontent.com/93931081/218508911-880bfc84-300c-4f0a-bd0a-d77cf0259c1c.mp4
 
 ## 🧐 About <a name = "about"></a>
 
