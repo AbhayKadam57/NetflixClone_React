@@ -11,7 +11,6 @@ import {
 import LogInForm from "./Components/LogInForm";
 import SignInForm from "./Components/SignInForm";
 import { UserContext } from "./UserContext";
-import { createGlobalStyle } from "styled-components";
 import { ProfileConetxt } from "./ProfileContext";
 import { db } from "./firebase";
 import { doc, setDoc } from "firebase/firestore";

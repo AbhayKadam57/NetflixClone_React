@@ -126,7 +126,7 @@ const Movies = ({ heading, request }) => {
       url: "https://youtube-data8.p.rapidapi.com/search/",
       params: { q: `${title}`, hl: "en", gl: "US" },
       headers: {
-        "X-RapidAPI-Key": "0a58c523efmsh5fa9bfaabaf56ccp15310fjsn187501fba186",
+        "X-RapidAPI-Key": process.env.REACT_APP_RAPID_API_KEY,
         "X-RapidAPI-Host": "youtube-data8.p.rapidapi.com",
       },
     };
