@@ -33,7 +33,7 @@ function App() {
 
   useEffect(() => {
     const getData = async () => {
-      await setDoc(doc(db, "users", username.uid), {
+      await setDoc(doc(db, "users", username?.uid), {
         avatar: avatar,
         selected: selected,
       });
@@ -42,7 +42,7 @@ function App() {
     if (avatar.length > 0) {
       getData();
     }
-  }, [avatar, selected, username.uid]);
+  }, [avatar, selected, username?.uid]);
 
   return (
     <div className="App">
