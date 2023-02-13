@@ -33,7 +33,7 @@ Please follow the instructions below to run the application on your local machin
 1. Clone the repo :
 
 ```
-git clone https://github.com/AbhayKadam57/Ecommerce-Shopping-Website.git
+git clone https://github.com/AbhayKadam57/NetflixClone_React.git
 ```
 
 2. Install the project's packages with the following commands:
