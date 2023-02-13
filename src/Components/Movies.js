@@ -1,10 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronLeft,
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -26,16 +21,16 @@ const Container = styled.div`
   }
 `;
 
-const SlideBox = styled.div`
-  display: flex;
-  align-items: center;
-  overflow-x: scroll;
-  flex-direction: row;
+// const SlideBox = styled.div`
+//   display: flex;
+//   align-items: center;
+//   overflow-x: scroll;
+//   flex-direction: row;
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
+//   &::-webkit-scrollbar {
+//     display: none;
+//   }
+// `;
 
 const Movie = styled.div`
   width: 200px;
@@ -85,15 +80,15 @@ const Slide = styled(Slider)`
   height: 150px;
 `;
 
-const Arrow = styled.div`
-  position: absolute;
-  top: 50%;
-  font-size: 1.5em;
-  color: white;
-  left: ${(props) => props.direction === "left" && "0"};
-  right: ${(props) => props.direction === "right" && "0"};
-  cursor: pointer;
-`;
+// const Arrow = styled.div`
+//   position: absolute;
+//   top: 50%;
+//   font-size: 1.5em;
+//   color: white;
+//   left: ${(props) => props.direction === "left" && "0"};
+//   right: ${(props) => props.direction === "right" && "0"};
+//   cursor: pointer;
+// `;
 
 const Title = styled.h3`
   position: absolute;
@@ -112,7 +107,7 @@ const Movies = ({ heading, request }) => {
 
   const [isHover, setHover] = useState(-1);
 
-  const [loaded, setLoaded] = useState(false);
+  // const [loaded, setLoaded] = useState(false);
 
   const [search, setSearch] = useState();
 
@@ -179,7 +174,7 @@ const Movies = ({ heading, request }) => {
     return () => {
       subscribe = false;
     };
-  }, []);
+  }, [request]);
 
   var settings = {
     dots: false,

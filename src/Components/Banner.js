@@ -136,7 +136,7 @@ const Banner = ({ request }) => {
     return () => {
       subscribe = false;
     };
-  }, []);
+  }, [request]);
 
   const handleSearch = (title) => {
     setSearch(title);

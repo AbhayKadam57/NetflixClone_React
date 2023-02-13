@@ -5,7 +5,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Link,
   Navigate,
 } from "react-router-dom";
 import LogInForm from "./Components/LogInForm";
@@ -43,7 +42,7 @@ function App() {
     if (avatar.length > 0) {
       getData();
     }
-  }, [avatar, selected]);
+  }, [avatar, selected, username.uid]);
 
   return (
     <div className="App">
