@@ -16,6 +16,15 @@
 
 Please watch the following demo video for usage of the website:
 
+#####Live Website
+
+[NextFlix](https://63ea677d64518e005ccf4351--magenta-salamander-3ed14e.netlify.app/)
+
+<h6>OR</h6>
+
+https://63ea677d64518e005ccf4351--magenta-salamander-3ed14e.netlify.app/
+
+<h5>Video Demo</h5>
 https://user-images.githubusercontent.com/93931081/218508911-880bfc84-300c-4f0a-bd0a-d77cf0259c1c.mp4
 
 ## 🧐 About <a name = "about"></a>
