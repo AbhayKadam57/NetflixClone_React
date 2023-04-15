@@ -18,7 +18,7 @@ Please watch the following demo video for usage of the website:
 
 #####Live Website
 
-[NextFlix](https://63ea677d64518e005ccf4351--magenta-salamander-3ed14e.netlify.app/)
+[NextFlix](https://netflix-clone-abhay.onrender.com/)
 
 <h6>OR</h6>
 
